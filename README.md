@@ -1,15 +1,7 @@
 # infra
 Infrastructure-as-Code for provisioning the full cloud foundation of the platform.  
-This repository contains Terraform modules and environment configurations used to create:
-
-- VPC and networking (subnets, routing, NAT, gateways)
-- Kubernetes cluster (EKS or GKE)
-- Node groups (spot and on-demand)
-- IAM roles and policies (including IRSA)
-- Container registry
-- Database instances (optional)
-- Remote state backend (S3/GCS + DynamoDB/locking)
-- ArgoCD bootstrap bucket (optional)
+This repository contains all infrastructure-as-code for provisioning cloud resources and Kubernetes clusters.
+It uses Terraform modules and Terragrunt for environment layering and DRY configuration.
 
 This repository forms the first layer of the everything-as-code platform.
 
@@ -19,29 +11,34 @@ This repository forms the first layer of the everything-as-code platform.
 
 ```
 infra/
-  modules/
-    vpc/
-    eks/
-    iam/
-    rds/
-    ecr/
-  envs/
-    dev/
-    staging/
-    prod/
-  scripts/
-    generate-inventory.sh
-    extract-kubeconfig.sh
-  ci/
-    terraform-plan.yml
-    terraform-apply.yml
+├── terragrunt.hcl
+├── live/
+│ ├── dev/
+│ │ └── terragrunt.hcl
+│ ├── staging/
+│ │ └── terragrunt.hcl
+│ └── prod/
+│ └── terragrunt.hcl
+└── modules/
+├── network/
+├── eks/
+├── rds/
+└── storage/
 ```
+
+---
+
+## Goals
+- Provision Kubernetes clusters and supporting cloud infrastructure.
+- Maintain strict separation of environments.
+- Reuse Terraform modules cleanly.
+- Provide a reproducible foundation for GitOps workflows.
 
 ---
 
 ## Workflow
 
-1. Commit changes to `envs/<environment>`.
+1. Commit changes to `live/<environment>`.
 2. GitHub Actions runs `terraform plan`.
 3. On approval, `terraform apply` is executed.
 4. Outputs generate kubeconfig and IAM bindings for GitOps bootstrap.
@@ -57,6 +54,16 @@ infra/
 
 ---
 
+## How to Run
+```
+cd live/dev
+terragrunt init
+terragrunt plan
+terragrunt apply
+```
+
+---
 ## Purpose
 
-This repo maps directly to CKA provisioning competencies and provides the cluster foundation required for GitOps (ArgoCD) and progressive delivery.
+This repo maps directly to CKA provisioning competencies and provides the cluster foundation required for
+GitOps (ArgoCD) and progressive delivery.
