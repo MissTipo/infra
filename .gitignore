@@ -35,3 +35,8 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# Ignore .env files containing credentials or environment variables
+.env
+*.env
+.env.*.local
