@@ -34,7 +34,7 @@ remote_state {
 inputs = {
   region     = local.region
   project    = local.project
-  account_id        = local.compartment_ocid
+  compartment_ocid  = local.compartment_ocid
   tenancy_ocid      = local.tenancy_ocid
   user_ocid         = local.user_ocid
   fingerprint       = local.fingerprint
