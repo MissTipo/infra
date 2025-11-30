@@ -64,6 +64,75 @@ oci network route-table update \
 
 **Update security-list**
 ```bash
+oci network security-list update \
+  --security-list-id <security_list_ocid> \
+  --ingress-security-rules '[
+    {
+      "protocol": "6",
+      "source": "
+      "sourceType": "CIDR_BLOCK",
+      "tcpOptions": {
+        "destinationPortRange": {
+          "max": 443,
+          "min": 443
+        }
+      }
+    }
+  ]'
+```
+
+**List region list**
+```bash
+oci iam region list
+```
+**List load balancers in a compartment**
+```bash
+oci lb load-balancer list --compartment-id <compartment_ocid>
+```
+
+**Create load balancer**
+```bash
+oci lb load-balancer create \
+  --compartment-id "<compartment_ocid" \
+  --display-name "<name>" \
+  --shape-name "flexible" \
+  --shape-details '{"maximumBandwidthInMbps": 100, "minimumBandwidthInMbps": 10}' \
+  --subnet-ids '["<subnet_ocid"]'
+```
+
+**Create backend set**
+```bash
+oci lb backend-set create \
+  --load-balancer-id <load_balancer_ocid> \
+  --name infra-dev-backendset \
+  --policy ROUND_ROBIN \
+  --health-checker-port 80 \
+  --health-checker-protocol HTTP \
+  --health-checker-url-path / \
+  --health-checker-retries 3 \
+  --health-checker-return-code 200
+```
+**List compute instances in a compartment**
+```bash
+oci compute instance list --compartment-id <compartment_ocid>
+```
+**List vnic-attachments for a compute instance**
+```bash
+oci compute vnic-attachment list --compartment-id <compartment_ocid> --instance-id <instance_ocid>
+```
+**Get vnic details**
+```bash
+oci network vnic get --vnic-id <vnic_ocid>
+```
+**Create lb listener**
+```bash
+oci lb listener create \
+  --load-balancer-id <load_balancer_ocid> \
+  --name infra-dev-listener \
+  --default-backend-set-name infra-dev-backendset \
+  --protocol HTTP \
+  --port 80
+```
 
     
 
