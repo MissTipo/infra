@@ -38,3 +38,7 @@ variable "node_memory_in_gbs" { default = 16 }
 variable "node_ocpus"          { default = 2 }
 variable "ssh_public_key" {}
 
+variable "vcn_cidr_block" {
+  type = string
+}
+
